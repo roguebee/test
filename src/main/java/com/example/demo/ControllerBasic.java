@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,21 +17,27 @@ import org.springframework.web.client.RestTemplate;
 public class ControllerBasic {
 
 	@Autowired
-    private RestTemplate restTemplate;
-	
-	public ControllerBasic(RestTemplate restTemplate) { 	
-		this.restTemplate  = restTemplate;
+	private RestTemplate restTemplate;
+
+	@Value("${apiKey}")
+	private String apiKey;
+
+	public ControllerBasic(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
 	}
-	
+
+	public void setAlphaKey(String alphaKey) {
+		this.apiKey = alphaKey;
+	}
+
 	@GetMapping("/basicResponse")
 	public String basicResponse() {
-		// TODO Auto-generated method stub
 		return "test reponse";
 	}
 
 	@GetMapping("/currentDayOfWeek")
 	public String currentDayOfWeek() {
-		
+
 		Calendar calendar = Calendar.getInstance();
 		Date date = calendar.getTime();
 
@@ -38,9 +45,11 @@ public class ControllerBasic {
 	}
 
 	@GetMapping("/industry/{ticker}")
-	public String getStockPrice(@PathVariable String ticker) {
-		ResponseEntity<ApiOverview> responseEntity = restTemplate.getForEntity("https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + ticker + "&apikey=H4EUUANL128ARQUP", ApiOverview.class);
-		
+	public String getStockIndustry(@PathVariable String ticker) {
+		ResponseEntity<ApiOverview> responseEntity = restTemplate.getForEntity(
+				"https://www.alphavantage.co/query?function=OVERVIEW&symbol=" + ticker + "&apikey=" + apiKey,
+				ApiOverview.class);
+
 		return responseEntity.getBody().getIndustry();
 	}
 

@@ -1,4 +1,5 @@
 package com.example.demo;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.SimpleDateFormat;
@@ -13,65 +14,66 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class ControllerTest {
-	
-    private RestTemplate restTemplate;
 
-    private ControllerBasic controllerBasic;
-    
-    public ControllerTest() {
-    	restTemplate = Mockito.mock(RestTemplate.class);
-    	controllerBasic = new ControllerBasic(restTemplate);
+	private static final String API_KEY = "H4EUUANL128ARQUP";
+
+	private RestTemplate restTemplate;
+
+	private ControllerBasic controllerBasic;
+
+	public ControllerTest() {
+		restTemplate = Mockito.mock(RestTemplate.class);
+		controllerBasic = new ControllerBasic(restTemplate);
 	}
-	
+
 	@Test
 	public void testBasicReturn() {
-		//arrange
+		// arrange
 		String expectedResponse = "test reponse";
-		
-		//act
+
+		// act
 		String actualResponse = controllerBasic.basicResponse();
-		
-		//assert
+
+		// assert
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
-	
+
 	@Test
 	public void currentDay() {
-		//arrange
+		// arrange
 		Calendar calendar = Calendar.getInstance();
 		Date date = calendar.getTime();
 
 		String expectedResponse = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
-		
-		//act
+
+		// act
 		String actualResponse = controllerBasic.currentDayOfWeek();
-		
-		//assert
+
+		// assert
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
-	
+
 	@Test
-	public void currentStockPrice() {
-		//arrange
+	public void stockIndustry() {
+		// arrange
 		String expectedResponse = "industry";
 		String urlAMC = "https://www.alphavantage.co/query?function=OVERVIEW&symbol=AMC&apikey=H4EUUANL128ARQUP";
-		
-		
-		String industry = "industry";
-		
-		ApiOverview overview = new ApiOverview();
-		overview.setIndustry(industry);
-		
-        Mockito
-          .when(restTemplate.getForEntity(urlAMC, ApiOverview.class))
-          .thenReturn(new ResponseEntity<ApiOverview>(overview, HttpStatus.OK));
-		
-		//act
+
+		controllerBasic.setAlphaKey(API_KEY);
+
+		String stockIndustry = "industry";
+
+		ApiOverview apiOverview = new ApiOverview();
+		apiOverview.setIndustry(stockIndustry);
+
+		Mockito.when(restTemplate.getForEntity(urlAMC, ApiOverview.class))
+				.thenReturn(new ResponseEntity<ApiOverview>(apiOverview, HttpStatus.OK));
+
+		// act
 		String stockTicker = "AMC";
-		String actualResponse = controllerBasic.getStockPrice(stockTicker);
-		
-		//assert
+		String actualResponse = controllerBasic.getStockIndustry(stockTicker);
+
+		// assert
 		assertThat(actualResponse).isEqualTo(expectedResponse);
-		
 	}
 }
