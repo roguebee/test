@@ -52,5 +52,14 @@ public class ControllerBasic {
 
 		return responseEntity.getBody().getIndustry();
 	}
+	
+	@GetMapping("/quote/{ticker}")
+	public String getStockQuote(@PathVariable String ticker) {
+		ResponseEntity<GlobalQuoteRoot> responseEntity = restTemplate.getForEntity(
+				"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + ticker + "&apikey=" + apiKey,
+				GlobalQuoteRoot.class);
+
+		return responseEntity.getBody().getGlobalQuote().get_05Price();
+	}
 
 }

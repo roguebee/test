@@ -76,4 +76,31 @@ public class ControllerTest {
 		// assert
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
+	
+	@Test
+	public void stockQuote() {
+		// arrange
+		String expectedResponse = "quote";
+		String urlAMC = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=AMC&apikey=H4EUUANL128ARQUP";
+
+		controllerBasic.setAlphaKey(API_KEY);
+
+		String stockQuote = "quote";
+
+		GlobalQuote globalQuote = new GlobalQuote();
+		globalQuote.set_05Price(stockQuote);
+		
+		GlobalQuoteRoot globalQuoteRoot = new GlobalQuoteRoot();
+		globalQuoteRoot.setGlobalQuote(globalQuote);
+
+		Mockito.when(restTemplate.getForEntity(urlAMC, GlobalQuoteRoot.class))
+				.thenReturn(new ResponseEntity<GlobalQuoteRoot>(globalQuoteRoot, HttpStatus.OK));
+
+		// act
+		String stockTicker = "AMC";
+		String actualResponse = controllerBasic.getStockQuote(stockTicker);
+
+		// assert
+		assertThat(actualResponse).isEqualTo(expectedResponse);
+	}
 }
