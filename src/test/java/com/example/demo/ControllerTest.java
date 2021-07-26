@@ -2,12 +2,14 @@ package com.example.demo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
+import org.knowm.xchart.BitmapEncoder;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +78,7 @@ public class ControllerTest {
 		// assert
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
-	
+
 	@Test
 	public void stockQuote() {
 		// arrange
@@ -89,7 +91,7 @@ public class ControllerTest {
 
 		GlobalQuote globalQuote = new GlobalQuote();
 		globalQuote.set_05Price(stockQuote);
-		
+
 		GlobalQuoteRoot globalQuoteRoot = new GlobalQuoteRoot();
 		globalQuoteRoot.setGlobalQuote(globalQuote);
 
@@ -103,4 +105,16 @@ public class ControllerTest {
 		// assert
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
+
+//	@Test
+//	public void drawStockGraph() {
+//		// arrange
+//
+//		// act
+//		BitmapEncoder.getBufferedImage(chart)
+//		BufferedImage.
+//
+//		// assert
+//
+//	}
 }
