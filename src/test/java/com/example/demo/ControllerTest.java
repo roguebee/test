@@ -2,14 +2,15 @@ package com.example.demo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.commons.codec.cli.Digest;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.Test;
-import org.knowm.xchart.BitmapEncoder;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -106,15 +107,17 @@ public class ControllerTest {
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
 
-//	@Test
-//	public void drawStockGraph() {
-//		// arrange
-//
-//		// act
-//		BitmapEncoder.getBufferedImage(chart)
-//		BufferedImage.
-//
-//		// assert
-//
-//	}
+	@Test
+	public void drawStockGraph() throws IOException {
+		// arrange
+		byte[] expectedImage = null; 
+		String ticker = "ticker";
+
+		// act
+		byte[] actualImage = controllerBasic.getStockGraph(ticker);
+
+		// assert
+		
+		assertThat(DigestUtils.sha256(actualImage)).isEqualTo(DigestUtils.sha256(expectedImage));
+	}
 }

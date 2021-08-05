@@ -1,15 +1,11 @@
 package com.example.demo;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import org.apache.commons.io.IOUtils;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.XYChart;
@@ -74,7 +70,7 @@ public class ControllerBasic {
 	}
 
 	@GetMapping(value = "/quote/graph/{ticker}", produces = MediaType.IMAGE_PNG_VALUE)
-	public byte[] getStockGraph() throws IOException {
+	public byte[] getStockGraph(String ticker) throws IOException {
 		double[] yData = new double[] { 2.0, 1.0, 0.0 };
 
 //		// Create Chart
@@ -88,10 +84,23 @@ public class ControllerBasic {
 		byte[] bitmapBytes = BitmapEncoder.getBitmapBytes(chart, BitmapFormat.PNG);
 		
 	    return bitmapBytes;
+	}
+	
+	@GetMapping(value = "/quote/graph/{ticker}", produces = MediaType.IMAGE_PNG_VALUE)
+	public byte[] getStockGraphExample() throws IOException {
+		double[] yData = new double[] { 2.0, 1.0, 0.0 };
+
+//		// Create Chart
+		XYChart chart = new XYChart(500, 400);
+		chart.setTitle("Sample Chart");
+		chart.setXAxisTitle("X");
+		chart.setXAxisTitle("Y");
+		XYSeries series = chart.addSeries("y(x)", null, yData);
+		series.setMarker(SeriesMarkers.CIRCLE);
 		
-//		InputStream in = getClass()
-//			      .getResourceAsStream("/com/example/demo/test.jpg");
-//		return IOUtils.toByteArray(in);
+		byte[] bitmapBytes = BitmapEncoder.getBitmapBytes(chart, BitmapFormat.PNG);
+		
+	    return bitmapBytes;
 	}
 
 }
